@@ -1,16 +1,14 @@
-package uuid7_test
+package uuid7
 
 import (
 	"bytes"
 	"testing"
-
-	"github.com/GoWebProd/gip/fasttime"
-	"github.com/GoWebProd/uuid7"
+	"time"
 )
 
 func TestUuid(t *testing.T) {
-	u := uuid7.New()
-	now := fasttime.NowNano() / 1_000_000
+	u := New()
+	now := time.Now().UnixMilli()
 
 	v := u.Next()
 
@@ -28,7 +26,7 @@ func TestUuid(t *testing.T) {
 		t.Fatal("bad uuid string format")
 	}
 
-	v2, err := uuid7.Parse(vString)
+	v2, err := Parse(vString)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -39,7 +37,7 @@ func TestUuid(t *testing.T) {
 }
 
 func BenchmarkNext(b *testing.B) {
-	u := uuid7.New()
+	u := New()
 
 	for i := 0; i < b.N; i++ {
 		_ = u.Next()
@@ -47,7 +45,7 @@ func BenchmarkNext(b *testing.B) {
 }
 
 func BenchmarkString(b *testing.B) {
-	u := uuid7.New().Next()
+	u := New().Next()
 
 	for i := 0; i < b.N; i++ {
 		_ = u.String()
@@ -58,7 +56,7 @@ func BenchmarkParse(b *testing.B) {
 	v := "017F21CF-D130-7CC3-98C4-DC0C0C07398F"
 
 	for i := 0; i < b.N; i++ {
-		_, err := uuid7.Parse(v)
+		_, err := Parse(v)
 		if err != nil {
 			b.Fatal(err)
 		}

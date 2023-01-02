@@ -4,8 +4,7 @@ import (
 	"encoding/binary"
 	"math/rand"
 	"sync"
-
-	"github.com/GoWebProd/gip/fasttime"
+	"time"
 )
 
 type Generator struct {
@@ -16,12 +15,12 @@ type Generator struct {
 
 func New() *Generator {
 	return &Generator{
-		rnd: rand.NewSource(fasttime.Now()),
+		rnd: rand.NewSource(time.Now().Unix()),
 	}
 }
 
 func (u *Generator) Next() UUID {
-	ts := fasttime.NowNano() / 1_000_000
+	ts := time.Now().UnixMilli()
 
 	u.mu.Lock()
 
