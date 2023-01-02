@@ -19,7 +19,7 @@ func New() *Generator {
 	}
 }
 
-func (u *Generator) Next() UUID {
+func (u *Generator) NextID() UUID {
 	ts := time.Now().UnixMilli()
 
 	u.mu.Lock()

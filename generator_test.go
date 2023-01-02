@@ -2,15 +2,27 @@ package uuid7
 
 import (
 	"bytes"
+	"fmt"
 	"testing"
 	"time"
 )
+
+func TestLexicalSort(t *testing.T) {
+	u := New()
+	iters := 100
+	for i := 0; i < iters; i++ {
+		time.Sleep(1 * time.Millisecond)
+		v := u.NextID()
+		fmt.Println(v.String())
+	}
+
+}
 
 func TestUuid(t *testing.T) {
 	u := New()
 	now := time.Now().UnixMilli()
 
-	v := u.Next()
+	v := u.NextID()
 
 	if v.Timestamp() < uint64(now)-1 || v.Timestamp() > uint64(now)+1 {
 		t.Fatalf("Timestamp: expected %d, got %d", now, v.Timestamp())
@@ -40,12 +52,12 @@ func BenchmarkNext(b *testing.B) {
 	u := New()
 
 	for i := 0; i < b.N; i++ {
-		_ = u.Next()
+		_ = u.NextID()
 	}
 }
 
 func BenchmarkString(b *testing.B) {
-	u := New().Next()
+	u := New().NextID()
 
 	for i := 0; i < b.N; i++ {
 		_ = u.String()
